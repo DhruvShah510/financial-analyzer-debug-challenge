@@ -77,10 +77,12 @@ The original project was non-functional. The following is a summary of the issue
 * **In `main.py`:**
     * **Bug:** The FastAPI endpoint and an imported task object shared the same name (`analyze_financial_document`), leading to unpredictable "shadowing" behavior.
     * **Fix:** Renamed the endpoint function to `analyze_document_endpoint` to resolve the conflict.
-      -
+
+
     * **Bug:** The path to the uploaded document was never passed to the CrewAI process, causing the system to ignore the user's file.
     * **Fix:** The `file_path` was correctly passed into the `crew.kickoff()` method.
-      
+
+
     * **Bug:** The crew was initialized with only one of the four defined agents and tasks, leaving the intended workflow unimplemented.
     * **Fix:** Assembled a full, sequential crew with all four agents and their corresponding tasks.
 
