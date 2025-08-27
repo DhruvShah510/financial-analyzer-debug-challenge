@@ -4,16 +4,17 @@ A fully debugged and operational multi-agent financial document analyzer built w
 # Fixed Financial Document Analyzer
 
 ## Project Overview
-This project is a fully debugged and operational AI-powered financial analysis system built with CrewAI. It utilizes a team of four specialized AI agents to read, analyze, and provide investment insights and risk assessments on financial documents. The system is exposed via a FastAPI backend, allowing for easy integration and use.
+This project is a fully debugged and operational AI-powered financial analysis system built with CrewAI. It utilizes a team of four specialized AI agents to read, analyze, and provide investment insights and risk assessments on financial documents. The system is exposed via a FastAPI backend, allowing for easy integration and use. In addition to fixing all core bugs, this submission also includes the implementation of advanced bonus features: a database for persistent storage and an asynchronous task queue to handle concurrent requests, transforming the application into a scalable, production-style system.
 
 ---
 
 ## Features
-* **Multi-Agent System:** A team of four distinct AI agents (Data Quality Analyst, Senior Financial Analyst, Investment Advisor, and Risk Assessor) collaborate in a sequential workflow to produce a comprehensive report.
+* **Multi-Agent System:** A team of four distinct AI agents collaborate in a sequential workflow to produce a comprehensive report.
+* **Asynchronous Task Queuing:** Uses Celery and Redis to handle long-running analysis jobs in the background, keeping the API fast and responsive.
+* **Persistent Storage:** Saves all analysis results to a structured SQLite database for permanent storage and future retrieval.
 * **PDF & Text File Analysis:** Capable of ingesting and processing financial data from both PDF and plain text files.
-* **Web-Enabled Analysis:** The Senior Financial Analyst agent can use a search tool to gather real-time market news and sentiment for a more context-rich analysis.
-* **Structured JSON Output:** The final report is saved in a structured, machine-readable JSON format for easy use in other applications.
-* **Local LLM Integration:** Powered by a local LLM (e.g., Llama 3, Phi-3, etc.) running via Ollama, ensuring data privacy and control.
+* **Web-Enabled Analysis:** The Senior Financial Analyst agent can use a search tool to gather real-time market news and sentiment.
+* **Local LLM Integration:** Powered by a local LLM (e.g., Llama 3, Phi-3) running via Ollama.
 
 ---
 
