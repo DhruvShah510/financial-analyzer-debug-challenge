@@ -22,6 +22,8 @@ This project is a fully debugged and operational AI-powered financial analysis s
 * **Backend:** Python, FastAPI
 * **AI Framework:** CrewAI
 * **LLM Integration:** LangChain, Ollama
+* **Database:** SQLite
+* **Task Queue:** Celery, Redis
 * **Tools:** Serper (for web search), PyPDFLoader
 
 ---
