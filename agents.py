@@ -1,15 +1,17 @@
+import os
 from crewai import Agent
 from langchain_ollama.chat_models import ChatOllama
-from tools import search_tool, read_document_tool
+from tools import read_document_tool, search_tool
 
 # --- LLM Initialization ---
-# Final Fix: Manually specify 'ollama/' as the provider in the model name.
-# llm = ChatOllama(model="ollama/llama3:8b", base_url="http://localhost:11434")
-llm = ChatOllama(model="ollama/deepseek-r1:1.5b", base_url="http://localhost:11434")
-# llm = ChatOllama(model="ollama/phi3:mini", base_url="http://localhost:11434")
-
+# Corrected: Use the direct IP address 127.0.0.1 instead of 'localhost'
+llm = ChatOllama(
+    model="ollama/deepseek-r1:1.5b", # Or whichever model you are testing with
+    base_url="http://127.0.0.1:11434"
+)
 
 # --- Agent Definitions ---
+# (The rest of the file remains exactly the same)
 
 # Agent 1: Data Quality Analyst
 data_quality_analyst = Agent(

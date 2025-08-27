@@ -6,4 +6,7 @@ uvicorn
 langchain_community
 pypdf
 python-multipart
-pip install langchain-ollama
+langchain-ollama
+celery
+redis
+eventlet
