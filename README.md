@@ -122,6 +122,21 @@ The original project was non-functional. The following is a summary of the issue
 
 ---
 
+## Bonus Features Implemented
+
+To build a more robust and scalable application, the following bonus features were successfully implemented:
+
+### 1. Database Integration
+* The application now uses a built-in SQLite database (`analysis_results.db`) to provide persistent storage for all analysis results.
+* Each job is saved with a unique ID, the original query, the filename, a timestamp, its status (`PENDING`/`COMPLETED`), and the final analysis report.
+
+### 2. Asynchronous Queue Worker Model
+* The system was upgraded to handle concurrent requests using **Celery** and **Redis**.
+* The FastAPI endpoint now instantly queues analysis jobs and returns a task ID to the user, ensuring the API remains fast and responsive even under heavy load.
+* A separate Celery worker process runs the time-consuming AI analysis in the background, updating the database upon completion. This architecture transforms the application into a scalable, production-ready system.
+
+---
+
 ## Challenges Faced and Strategic Decisions
 After fixing all the deterministic bugs and rewriting the inefficient prompts, the application's core multi-agent workflow was fully functional.
 
