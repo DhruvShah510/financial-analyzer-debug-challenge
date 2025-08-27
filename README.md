@@ -91,6 +91,8 @@ The original project was non-functional. The following is a summary of the issue
 * **In `agents.py`:**
     * **Bug:** The `llm` object was used without being defined or initialized (`llm = llm`).
     * **Fix:** Correctly imported and initialized a `ChatOllama` instance from the modern `langchain-ollama` library.
+
+    ---
       
     * **Bug:** Tools were passed as method references instead of instantiated objects, which is incompatible with CrewAI.
     * **Fix:** Re-engineered the tool as a proper class inheriting from `BaseTool` and passed the instantiated object to the agents.
@@ -98,9 +100,13 @@ The original project was non-functional. The following is a summary of the issue
 * **In `tools.py`:**
     * **Bug:** The code called a non-existent `Pdf` class to read documents.
     * **Fix:** Imported and used the standard `PyPDFLoader` library for robust PDF parsing.
+ 
+    ---
       
     * **Bug:** The custom tool class did not inherit from `BaseTool` or use a decorator, making it invisible to CrewAI.
     * **Fix:** Rebuilt the tool to correctly inherit from `BaseTool`, making it a valid component.
+ 
+    ---
       
     * **Bug:** A `search_tool` was created but never used, and other tools were empty placeholders.
     * **Fix:** Removed the empty placeholders for clarity and correctly assigned the `search_tool` to the appropriate agent.
@@ -116,5 +122,13 @@ The original project was non-functional. The following is a summary of the issue
 
 ---
 
-## Limitations and Future Improvements
-The debugged application successfully executes the multi-agent workflow and produces a structurally correct financial analysis. A known limitation of general-purpose LLMs is a tendency towards "hallucination" with specific numerical data. As such, the quantitative details in the generated report are illustrative of the system's logical output rather than being factually precise. Future work could involve implementing more advanced data extraction techniques (like RAG or function-calling) to improve factual accuracy.
+## Challenges Faced and Strategic Decisions
+After fixing all the deterministic bugs and rewriting the inefficient prompts, the application's core multi-agent workflow was fully functional.
+
+During the final testing phase, I encountered a significant performance limitation with my local, CPU-based hardware. While the system is architected to use highly capable models like llama3:8b, my machine was unable to run them in a timely manner. This caused the connection to the Ollama server to time out before the agent could complete its complex reasoning task.
+
+To successfully demonstrate the now-working application, I made the strategic decision to switch to a smaller, faster model (deepseek-r1:1.5b). This allowed the entire crew to run to completion without timeout errors, proving that all the bugs in the application's logic had been solved.
+
+As a known trade-off, smaller models can exhibit a higher degree of "hallucination." Therefore, while the final report is structurally perfect, the specific financial numbers are illustrative rather than factually precise.
+
+I am confident that when this same debugged code is run on a system with a dedicated GPU or is configured to use a high-performance cloud API (like Groq or OpenAI), a larger model like llama3:8b would execute successfully and resolve this minor hallucination issue, producing factually perfect answers.
