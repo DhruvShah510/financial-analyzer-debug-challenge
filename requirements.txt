@@ -1,0 +1,9 @@
+python-dotenv
+crewai
+crewai_tools
+fastapi
+uvicorn
+langchain_community
+pypdf
+python-multipart
+pip install langchain-ollama
