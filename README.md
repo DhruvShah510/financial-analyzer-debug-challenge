@@ -11,8 +11,8 @@ This project is a fully debugged and operational AI-powered financial analysis s
 ## Features
 * **Multi-Agent System:** A team of four distinct AI agents collaborate in a sequential workflow to produce a comprehensive report.
 * **Asynchronous Task Queuing:** Uses Celery and Redis to handle long-running analysis jobs in the background, keeping the API fast and responsive.
-* **Persistent Storage:** Saves all analysis results to a structured SQLite database for permanent storage and future retrieval.
-* **PDF & Text File Analysis:** Capable of ingesting and processing financial data from both PDF and plain text files.
+* **Persistent Storage:** Saves all analysis results to a structured SQLite database (`analysis_results.db`) for permanent storage and future retrieval.
+* **PDF & Text File Analysis:** Capable of ingesting and processing financial data from PDF files.
 * **Web-Enabled Analysis:** The Senior Financial Analyst agent can use a search tool to gather real-time market news and sentiment.
 * **Local LLM Integration:** Powered by a local LLM (e.g., Llama 3, Phi-3) running via Ollama.
 
@@ -30,7 +30,8 @@ This project is a fully debugged and operational AI-powered financial analysis s
 
 1.  **Clone the Repository:**
     ```sh
-    git clone https://github.com/DhruvShah510/financial-analyzer-debug-challenge.git 
+    git clone https://github.com/DhruvShah510/financial-analyzer-debug-challenge.git
+    cd financial-analyzer-debug-challenge
     ```
 2.  **Create a Python Virtual Environment:**
     ```sh
@@ -41,31 +42,49 @@ This project is a fully debugged and operational AI-powered financial analysis s
     ```sh
     pip install -r requirements.txt
     ```
-4.  **Set Up Environment Variables:**
+4.  **Run Redis using Docker:**
+    Redis will act as our message broker. Start it with this command:
+    ```sh
+    docker run -d -p 6379:6379 --name redis redis:7
+    ```
+5.  **Set Up Environment Variables:**
     Create a `.env` file in the root of the project (see `.env.example` for a template). Your file should contain:
     ```
     SERPER_API_KEY="your_serper_api_key_here"
+    LITELLM_TIMEOUT="1800"
     ```
-
----
 
 ## How to Run and Use
 
-1.  **Start Your Local LLM:**
-    Ensure your local Ollama instance (e.g., via Docker) is running. Make sure you have pulled a model (e.g., `ollama pull llama3:8b`).
+To run the complete asynchronous application, you will need to have **two terminals** open.
 
-2.  **Start the API Server:**
+1.  **Start Background Services:**
+    Ensure your Docker containers for **Ollama** and **Redis** are running. Make sure you have pulled a model (e.g., `ollama pull llama3:8b`).
+
+2.  **In Terminal 1: Start the Celery Worker:**
+    This terminal will process the analysis jobs in the background. Navigate to your project folder, activate your virtual environment, and run:
+    ```sh
+    celery -A worker.celery_app worker --loglevel=info -P eventlet
+    ```
+    Leave this terminal running. You will see the crew's progress here when you submit a job.
+
+3.  **In Terminal 2: Start the API Server:**
+    Open a new terminal, navigate to your project folder, activate your virtual environment, and run:
     ```sh
     uvicorn main:app --reload
     ```
+    This is your main application server.
 
-3.  **Use the Application:**
-    Open your web browser and navigate to **`http://127.0.0.1:8000/docs`**. You can use this interactive interface to upload a financial document and receive a full analysis.
+4.  **Use the Application:**
+    Open your web browser and navigate to **`http://127.0.0.1:8000/docs`**.
+    * Use the `/analyze` endpoint to upload your PDF. You will get an **instant response** with a `file_id`.
+    * Copy that `file_id`.
+    * Use the `/results/{file_id}` endpoint to check the status of your job. Initially, it will be "PENDING." Once the worker is finished, the status will change to "COMPLETED" and you will see the full analysis.
 
     ### A Note on Testing and Performance
     This application's performance is highly dependent on the hardware it runs on.
     * **For users with a powerful GPU:** The system is capable of analyzing multi-page PDFs using a large model like `llama3:8b`.
-    * **For users on a standard CPU:** Running large models locally is very slow. To demonstrate the application's full logical workflow without timeouts, it is recommended to test with a smaller model (e.g., `phi3:mini` or `deepseek-r1:1.5b`) or a simple `.txt` file containing a few paragraphs of financial text.
+    * **For users on a standard CPU:** Running large models locally is very slow. To demonstrate the application's full logical workflow, it is recommended to test with a smaller model (e.g., `phi3:mini` or `deepseek-r1:1.5b`).
 
 ---
 
